@@ -47,23 +47,6 @@ type Alert struct {
 	ProcessID   int
 }
 
-// LoadConfig loads the configuration from an encrypted file.
-func LoadConfig() (*Config, error) {
-	// Simulating the loading of a configuration file.
-	// You would replace this with your actual loading and decryption logic.
-	fileContent, err := ioutil.ReadFile("config.json")
-	if err != nil {
-		return nil, fmt.Errorf("failed to read config file: %v", err)
-	}
-
-	var config Config
-	if err := json.Unmarshal(fileContent, &config); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal config: %v", err)
-	}
-
-	return &config, nil
-}
-
 // LoadConfig reads the config file, decrypts it, and unmarshals the JSON data
 func LoadConfig() (*Config, error) {
 	encryptedData, err := ioutil.ReadFile(configFile)
