@@ -55,12 +55,3 @@ func MonitorHoneypotFile(filePath string, config *Config) error {
 
 	return nil
 }
-
-// SendAlert triggers an alert by sending emails to the system admin and ransomguard company
-func SendAlert(customerEmail, companyEmail, filePath string) {
-	// TODO: Implement email sending logic (SMTP or other email service)
-
-	// Example log for alerting
-	log.Printf("Alert! Honeypot file modified: %s", filePath)
-	log.Printf("Sending email alert to customer: %s and company: %s", customerEmail, companyEmail)
-}
