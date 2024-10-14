@@ -100,21 +100,6 @@ func LoadConfig() (*Config, error) {
 	return &config, nil
 }
 
-// SendAlertEmail sends an alert email to the system administrator and the company.
-func SendAlertEmail(customerEmail, companyEmail string, alert Alert) error {
-	// Simulated email sending logic.
-	// You would replace this with your actual SMTP server logic.
-	to := []string{customerEmail, companyEmail}
-	msg := []byte(fmt.Sprintf("Subject: Ransomguard Alert\n\n%s detected on process: %s (PID: %d)", alert.Description, alert.ProcessName, alert.ProcessID))
-
-	auth := smtp.PlainAuth("", "your-email@example.com", "your-email-password", "smtp.example.com")
-	err := smtp.SendMail("smtp.example.com:587", auth, "from@example.com", to, msg)
-	if err != nil {
-		return fmt.Errorf("failed to send email: %v", err)
-	}
-	return nil
-}
-
 // TerminateProcess terminates the given process by process ID (PID).
 func TerminateProcess(pid int) error {
 	process, err := os.FindProcess(pid)
