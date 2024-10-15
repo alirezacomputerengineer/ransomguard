@@ -1,7 +1,3 @@
-Here’s an extended and formatted version of your README.md for the RansomGuard project:
-
----
-
 # RansomGuard
 
 **RansomGuard** is a standalone ransomware detection and prevention solution designed for Linux servers. It leverages multiple detection methods and provides a rollback mechanism to recover potentially compromised files. 
