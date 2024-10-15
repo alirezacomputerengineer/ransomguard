@@ -102,7 +102,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contributing
 
 Contributions are welcome! Please submit a pull request or open an issue for any bugs, feature requests, or improvements.
-
----
-
-This README should give potential users a good overview of what **RansomGuard** does, how it works, and how to configure it on their systems. Let me know if you need any additional changes!
