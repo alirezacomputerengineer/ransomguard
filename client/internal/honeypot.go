@@ -60,7 +60,7 @@ func createFileWithVolume(filePath string, volumeKB int) error {
 }
 
 // MonitorHoneypotFile monitors honeypot files for modifications and sends alerts
-func MonitorHoneypotFile(config *Config, alertChan chan Alert) {
+func MonitorHoneypotFiles(config *Config, alertChan chan Alert) {
 	for _, honeypot := range config.HoneypotFiles {
 		filePath := filepath.Join(honeypot.Route, honeypot.Name+honeypot.Extension)
 		go monitorFile(filePath, alertChan)
