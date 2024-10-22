@@ -32,7 +32,7 @@ func main() {
 
 	// Start monitoring honeypot files for any modifications
 	go func() {
-		err := internal.WatchHoneypotFiles(config, alertChan)
+		err := internal.MonitorHoneypotFile(config, alertChan)
 		if err != nil {
 			log.Fatalf("Error in honeypot file watching: %v", err)
 		}
