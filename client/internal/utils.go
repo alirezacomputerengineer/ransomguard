@@ -33,7 +33,7 @@ type Config struct {
 // HoneypotFile represents the configuration for a honeypot file.
 type HoneypotFile struct {
 	Name     string   `json:"name"`
-	Extensions []string `json:"extensions"`
+	Extension string `json:"extensions"`
 	Volume   string   `json:"volume"`
 	Route    string   `json:"route"`
 }
