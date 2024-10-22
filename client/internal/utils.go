@@ -9,18 +9,16 @@ import (
 	"io"
 )
 
-const (
-	smtpServer     = "smtp.example.com"
-	smtpPort       = "587"
-	smtpUsername   = "noreply@example.com" // Your email address
-	smtpPassword   = "yourpassword"        // Your email password
-	senderEmail    = "noreply@example.com" // Sender email
-	configFile = "/usr/local/ransomguard/config.txt" // Path to config file
-	encryptionKey = "hardcoded-encryption-key"       // Simple hardcoded key
-)
+const encryptionKey = "hardcoded-encryption-key"       // Simple hardcoded key
 
 // Config holds the configuration details for ransomguard
 type Config struct {
+	smtpServer     string `json:"smtp_server"` // "smtp.example.com"
+	smtpPort       string `json:"smtp_port"` // "587"
+	smtpUsername   string `json:"smtp_usr"` //"noreply@example.com" , Your email address
+	smtpPassword   string `json:"smtp_pwd"` //"yourpassword" , Your email password
+	senderEmail    string `json:"sender_email"` // "noreply@example.com" , Sender email
+	configFile =   string `json:"config_file"` //"/usr/local/ransomguard/config.txt" , Path to config file
 	HoneypotFiles        []HoneypotFile `json:"honeypot_files"`
 	CustomerEmail        string         `json:"customer_email"`
 	CompanyEmail         string         `json:"company_email"`
@@ -32,8 +30,8 @@ type Config struct {
 	RollbackParams       []string       `json:"rollback_params"`
 }
 
-// HoneypotFileConfig represents the configuration for a honeypot file.
-type HoneypotFileConfig struct {
+// HoneypotFile represents the configuration for a honeypot file.
+type HoneypotFile struct {
 	Name     string   `json:"name"`
 	Extensions []string `json:"extensions"`
 	Volume   string   `json:"volume"`
