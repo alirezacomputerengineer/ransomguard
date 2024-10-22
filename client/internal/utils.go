@@ -176,6 +176,32 @@ func DecryptData(encryptedData []byte, key string) ([]byte, error) {
 	nonce, ciphertext := data[:nonceSize], data[nonceSize:]
 	return gcm.Open(nil, nonce, ciphertext, nil)
 }
+
+// getProcessDetails retrieves the name and PID of the process that modified the file
+func getProcessDetails(filePath string) (string, int) {
+	// You can use `lsof` to find which process is accessing the file
+	cmd := exec.Command("lsof", "-t", filePath)
+	output, err := cmd.Output()
+	if err != nil {
+		log.Printf("Error retrieving process details: %v", err)
+		return "", 0
+	}
+
+	// Parse process ID from the output (assuming lsof returns one result)
+	processID := 0
+	fmt.Sscanf(string(output), "%d", &processID)
+
+	// Retrieve process name using the process ID
+	procPath := filepath.Join("/proc", fmt.Sprint(processID), "comm")
+	processName, err := os.ReadFile(procPath)
+	if err != nil {
+		log.Printf("Error retrieving process name: %v", err)
+		return "", processID
+	}
+
+	return string(processName), processID
+}
+
 // TerminateProcess terminates the given process by process ID (PID).
 func TerminateProcess(pid int) error {
 	process, err := os.FindProcess(pid)
