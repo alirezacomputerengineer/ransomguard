@@ -34,7 +34,7 @@ type Config struct {
 type HoneypotFile struct {
 	Name     string   `json:"name"`
 	Extension string `json:"extensions"`
-	Volume   string   `json:"volume"`
+	Volume     int      `json:"volume"`   // Size in kilobytes
 	Route    string   `json:"route"`
 }
 
