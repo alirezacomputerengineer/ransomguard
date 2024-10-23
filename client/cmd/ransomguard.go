@@ -48,7 +48,7 @@ func main() {
 
 	// Start static file watch for suspicious new files
 	go func() {
-		err := internal.WatchStaticFiles(config, alertChan)
+		err := internal.MonitorStaticFiles(config, alertChan)
 		if err != nil {
 			log.Fatalf("Error in static file watching: %v", err)
 		}
