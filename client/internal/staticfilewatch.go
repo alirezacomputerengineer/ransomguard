@@ -7,7 +7,7 @@ import (
 )
 
 // MonitorStaticFiles monitors newly created static files for suspicious content
-func MonitorHoneypotFiles(config Config, alertChan chan Alert) {
+func MonitorStaticFiles(config Config, alertChan chan Alert) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		fmt.Println("Error creating file watcher:", err)
