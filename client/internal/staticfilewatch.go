@@ -7,33 +7,61 @@ import (
 )
 
 // MonitorStaticFiles monitors newly created static files for suspicious content
-func MonitorStaticFiles(config *Config) error {
-	log.Println("Starting static file monitoring...")
+func MonitorHoneypotFiles(config Config, alertChan chan Alert) {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		fmt.Println("Error creating file watcher:", err)
+		return
+	}
+	defer watcher.Close()
 
-	// Simulate scanning files in a directory
-	filesToCheck := []string{"example.exe", "malware.db", "document.pdf"}
+	// Watch directories for new or modified files (you can customize these paths)
+	err = watcher.Add("/path/to/monitor") // You may want to monitor a directory like "/usr/bin" or "/opt"
+	if err != nil {
+		fmt.Println("Error adding path to watcher:", err)
+		return
+	}
 
-	for _, file := range filesToCheck {
-		content, err := ioutil.ReadFile(file) // Read the file content
-		if err != nil {
-			log.Printf("Failed to read file %s: %v", file, err)
-			continue
-		}
-
-		if containsSuspiciousContent(string(content), config.StaticFileKeywords) {
-			log.Printf("Suspicious content found in file %s", file)
-			SendAlert(config.CustomerEmail, config.CompanyEmail, file)
+	for {
+		select {
+		case event := <-watcher.Events:
+			// Check for new or modified executable files
+			if event.Op&(fsnotify.Create|fsnotify.Write) != 0 {
+				go scanFileForKeywords(event.Name, config.StaticFileKeywords, alertChan)
+			}
+		case err := <-watcher.Errors:
+			fmt.Println("Error:", err)
 		}
 	}
-	return nil
 }
 
-// containsSuspiciousContent checks if the file content contains any suspicious keywords
-func containsSuspiciousContent(fileContent string, keywords []string) bool {
-	for _, keyword := range keywords {
-		if strings.Contains(fileContent, keyword) {
-			return true
+func scanFileForKeywords(filePath string, keywords []string, alertChan chan Alert) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		fmt.Printf("Error opening file %s: %v\n", filePath, err)
+		return
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		for _, keyword := range keywords {
+			if strings.Contains(line, keyword) {
+				// Send an alert if keyword is found
+				alert := Alert{
+					Description: fmt.Sprintf("Keyword '%s' found", keyword),
+					ProcessName: "Static File",
+					ProcessID:   filePath,
+				}
+				alertChan <- alert
+				// You can stop after the first match or keep searching
+				break
+			}
 		}
 	}
-	return false
+
+	if err := scanner.Err(); err != nil {
+		fmt.Printf("Error reading file %s: %v\n", filePath, err)
+	}
 }
